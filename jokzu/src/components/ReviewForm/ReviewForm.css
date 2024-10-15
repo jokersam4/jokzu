@@ -1,0 +1,123 @@
+.aaaa{
+  width: 80%;
+  margin: auto;
+}
+
+.review-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+
+}
+
+.review-container {
+  background-color: #f7f7f7;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+  margin-bottom: 20px;
+}
+.loginfirst{
+  color: red;
+  font-weight: bold;
+  font-size: 20px;
+}
+.review-title {
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.review-form {
+  display: flex;
+  flex-direction: column;
+
+}
+
+.form-label {
+  width: 20%;
+  font-size: 18px;
+  font-weight: bold;
+  margin-bottom: 5px;
+}
+.form-textarea{
+  width: 100%;
+  margin-top: 20px;
+  outline: none;
+  margin-bottom: 20px;
+}
+.rating-stars {
+  display: flex;
+  border: none;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  margin-top: 20px;
+}
+
+.stars {
+  font-size: 18px;
+  color: orange;
+}
+
+.btnstar {
+ outline: none;
+  background-color: transparent;
+  padding: 0;
+  cursor: pointer;
+}
+.btnstar:hover{
+  border: none;
+}
+.stars{
+  outline: none;
+  background-color: none;
+ 
+
+}
+
+.herobtn {
+  background-color: #ff6600;
+  color: #fff;
+  padding: 10px 20px;
+  width: 150px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.herobtn2 {
+  background-color: #8a8a8a;
+  color: #000000;
+  padding: 10px 20px;
+  width: 150px;
+  border: none;
+  border-radius: 5px;
+  cursor:not-allowed;
+}
+.herobtn2:hover {
+  background-color: #8a8a8a;
+  color: #000000;
+  padding: 10px 20px;
+  width: 150px;
+  border: none;
+  border-radius: 5px;
+  cursor:not-allowed;
+}
+
+
+.scroll-container {
+  overflow-y: scroll;
+  height: 200px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 10px;
+}
+
+.scroll-item {
+  padding: 10px;
+  border-bottom: 1px solid #ccc;
+}
+
+.scroll-item:last-child {
+  border-bottom: none;
+}

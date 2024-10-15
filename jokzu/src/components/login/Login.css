@@ -1,0 +1,72 @@
+.login_btn {
+  display: flex;
+  flex-direction: column;
+}
+/* .login{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+} */
+ .S9gUrf-YoZ4jf{
+  align-self: center;
+ }
+.login_btn button {
+margin: auto;
+  padding: 1.2em;
+  border-radius: 5px;
+  border: none;
+  width: 200px;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
+  color: #fff;
+  cursor: pointer;
+  outline: none;
+  background: linear-gradient(to right, #901f00, #ff6600);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.login_btn button svg {
+  font-size: 1.1rem;
+  margin-left: 10px;
+}
+.login_btn {
+  font-size: 1.1rem;
+  margin-left: 10px;
+}
+.login_btn button:hover {
+  transition: all 0.3s ease;
+  box-shadow: none;
+  background: linear-gradient(to left, #901f00, #ff6600);
+}
+.login_btn .btn-alt {
+  background: linear-gradient(to left, #000000, #02897A);
+}
+.login_btn .btn-alt:hover {
+  transition: all 0.3s ease;
+  box-shadow: none;
+  background: linear-gradient(to right, #000000, #02897A);
+}
+
+@media (min-width: 1200px) {
+  .login_btn button {
+    width: 370px;
+  }
+}
+@media (max-width: 400px) {
+  .login_btn button {
+    width: 250px;
+  }
+  .login{
+   
+  }
+}
+
+
+
+
+
+
+/*# sourceMappingURL=Login.css.map */

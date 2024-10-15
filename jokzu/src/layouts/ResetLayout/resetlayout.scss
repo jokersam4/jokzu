@@ -1,0 +1,11 @@
+@import "../../components/variables/variables.scss";
+
+body {
+  background: $purple-dark;
+}
+
+.profilelayout {
+  background: $purple-dark;
+  display: flex;
+  overflow: hidden;
+}

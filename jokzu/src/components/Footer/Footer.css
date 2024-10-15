@@ -1,0 +1,28 @@
+/* src/components/Footer/Footer.css */
+.footer {
+    background-color: #753200;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+  }
+  
+  .social-media {
+    margin-bottom: 15px;
+  }
+  
+  .social-media-icon {
+    color: #fff;
+    font-size: 1.5rem;
+    margin: 0 10px;
+    transition: color 0.3s ease;
+  }
+  
+  .social-media-icon:hover {
+    color: #ff6600;
+  }
+  
+  .footer-text {
+    font-size: 1rem;
+    font-family: 'Poppins', sans-serif;
+  }
+  

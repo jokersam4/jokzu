@@ -1,0 +1,76 @@
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+    sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+.divpricecard{
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    color: rgb(29, 16, 0);
+    font-size: 25px;
+}
+/* LanguageSelectionScreen.css */
+.language-selection-screen {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: #f78b43;
+  text-align: center;
+  padding: 20px;
+}
+
+.language-selection-screen h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.language-selection-screen button {
+  font-size: 18px;
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.language-selection-screen button:hover {
+  background-color: #ffffff;
+}
+
+/* Mobile Styles */
+@media (max-width: 768px) {
+  .language-selection-screen h2 {
+    font-size: 20px;
+  }
+  
+  .language-selection-screen button {
+    font-size: 16px;
+    width: 80%;
+    max-width: 300px;
+  }
+}
+
+/* Desktop Styles */
+@media (min-width: 769px) {
+  .language-selection-screen {
+    background-color: #f78b43;
+  }
+  
+  .language-selection-screen button {
+    width: 200px;
+    font-size: 18px;
+  }
+}
