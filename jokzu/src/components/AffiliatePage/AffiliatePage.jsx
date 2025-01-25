@@ -226,7 +226,7 @@ const AffiliatePage = () => {
 
   };
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(`http://localhost:3000/?user=${userInfo.codepromo}`);
+    navigator.clipboard.writeText(`/?user=${userInfo.codepromo}`);
     setCopied(true);
     setTimeout(() => setCopied(false), 2000);  // Reset after 2 seconds
   };
@@ -270,7 +270,7 @@ const AffiliatePage = () => {
                     ) : (
                       <div className="view-mode">
                         <p className="promo-label">
-                          {language === 'en' ? "http://localhost:3000/?user=" : language === 'fr' ? "Votre code promo:  " : "رمزك الترويجي:  "} 
+                          {language === 'en' ? "/?user=" : language === 'fr' ? "Votre code promo:  " : "رمزك الترويجي:  "} 
                           <span className="promo-code">{  userInfo.codepromo  }</span>
                         </p>
                         <div>

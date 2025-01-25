@@ -22,7 +22,7 @@ const Comments = ({ name, rating, comment, image }) => {
     console.log("Image path: " + image);
   }, [image]);
 
-  const imageUrl = image ? `http://localhost:5000/uploads/${image}` : '';
+  const imageUrl = image ? `/uploads/${image}` : '';
 
   return (
     <div className="comment">
