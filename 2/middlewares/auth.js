@@ -2,14 +2,18 @@ const jwt = require("jsonwebtoken");
 
 const auth = (req, res, next) => {
   try {
-    // check ac token
+    // Get token from Authorization header
     const token = req.header("Authorization");
-    if (!token) return res.status(400).json({ msg: "Authentication failed." });
+    if (!token) return res.status(401).json({ msg: "Authentication failed." });
 
-    // validate
-    jwt.verify(token, process.env.ACCESS_TOKEN, (err, user) => {
-      if (err) return res.status(400).json({ msg: "Authentication failed." });
-      // success
+    // Extract token if it's in "Bearer <token>" format
+    const bearerToken = token.split(" ")[1];
+    if (!bearerToken) return res.status(401).json({ msg: "Token format is incorrect." });
+
+    // Validate the token
+    jwt.verify(bearerToken, process.env.ACCESS_TOKEN, (err, user) => {
+      if (err) return res.status(401).json({ msg: "Authentication failed." });
+      // Attach user to the request object and proceed
       req.user = user;
       next();
     });

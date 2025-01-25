@@ -10,6 +10,7 @@
 .authlayout_logo {
   border-radius: 90%;
   padding: 2em;
+  background: #ffffff;
   margin-bottom: 4em;
   animation: float 5s ease-in-out infinite;
 }
@@ -42,19 +43,19 @@
     transform: translateX(0);
   }
   25% {
-    box-shadow: 0 25px 15px 0 #ffb362;
+    box-shadow: 0 25px 15px 0 #c76700;
     transform: translateX(5px);
   }
   50% {
-    box-shadow: 0 25px 15px 0 #ffbb72;
+    box-shadow: 0 25px 15px 0 #e28119;
     transform: translateY(-5px);
   }
   75% {
-    box-shadow: 0 25px 15px 0 #fe8300;
+    box-shadow: 0 25px 15px 0 #b35c00;
     transform: translateX(5px);
   }
   100% {
-    box-shadow: 0 5px 15px 0 #ffb86c;
+    box-shadow: 0 5px 15px 0 #b35c00;
     transform: translateX(0);
   }
 }

@@ -6,7 +6,7 @@ import product1Image1 from './assets/img/aaaa.png';
 import product1Image2 from './assets/img/aaaa2.png';
 import Navbar from './components/Navbar/Navbar';
 import { AuthContext } from './context/AuthContext';
-import axios from 'axios';
+import './App.css'
 import Login from '../src/components/login/Login2';
 import AuthLayout from "./layouts/authLayout/AuthLayout";
 import AffiliatePage from './components/AffiliatePage/AffiliatePage';
@@ -20,6 +20,12 @@ import "react-toastify/dist/ReactToastify.css";
 import { jwtDecode } from "jwt-decode";
 import { GoogleLogin } from '@react-oauth/google';
 import ThankYou from './components/ThankYou/ThankYou';
+import axios from "axios";
+import WhatsAppButton from './components/Whatsapp/WhatsAppButton';
+import Ourproducts from './components/Ourproducts/Ourproducts';
+
+// Set the base URL for all requests
+axios.defaults.baseURL = "http://localhost:5000";
 
 // New Component for language selection
 const LanguageSelectionScreen = ({ onSelectLanguage }) => {
@@ -34,6 +40,7 @@ const LanguageSelectionScreen = ({ onSelectLanguage }) => {
 };
 
 const App = () => {
+
   const { user, dispatch, token, isLoggedIn, language } = useContext(AuthContext);
   const [clientSecret, setClientSecret] = useState("");
   const [currentRoute, setCurrentRoute] = useState(getCurrentRoute());
@@ -44,6 +51,8 @@ const App = () => {
     localStorage.setItem('language', lang); // Persist the selected language in localStorage
   };
   useEffect(() => {
+    console.log("aaaaa" + user.name)
+    
     const token = localStorage.getItem("_appToken");
     if (token) {
       try {
@@ -66,7 +75,9 @@ const App = () => {
     if (_appToken) {
       const getToken = async () => {
         try {
-          const res = await axios.post("/api/auth/access", null);
+          const res = await axios.post("/api/auth/access", {
+            headers: { Authorization: token },
+          }, { withCredentials: true });
           dispatch({ type: "GET_TOKEN", payload: res.data.ac_token });
         } catch (error) {
           console.error("Error fetching token:", error);
@@ -82,7 +93,8 @@ const App = () => {
         try {
           dispatch({ type: "SIGNING" });
           const res = await axios.get("/api/auth/user", {
-            headers: { Authorization: token },
+            headers: { Authorization: `Bearer ${token}` },
+            withCredentials: true,
           });
           dispatch({ type: "GET_USER", payload: res.data });
         } catch (error) {
@@ -92,6 +104,7 @@ const App = () => {
       getUser();
     }
   }, [dispatch, token]);
+  
 
   useEffect(() => {
     const handleHashChange = () => {
@@ -116,7 +129,7 @@ const App = () => {
         fr: 'T-shirt Goku',
         ar: 'تيشيرت غوكو',
       },
-      price: 299,
+      price: 199,
       sizes: ['S', 'M', 'L', 'XL', 'XXL', 'XXXL'],
       images: [product1Image1, product1Image2],
       description: {
@@ -154,6 +167,7 @@ const App = () => {
     <Router>
       <Navbar />
       <ScrollToTop />
+      <WhatsAppButton/>
       <Routes>
         <Route
           path="/"
@@ -189,10 +203,12 @@ const App = () => {
             />
           }
         />
+            <Route path="/Ourproducts" element={<Ourproducts language={language} />} />
         <Route path="/Affiliate" element={<AffiliatePage language={language} />} />
         <Route path="/login" element={<AuthLayout />} />
         <Route path="/auth/reset-password/:token" element={<ResetLayout />} />
         <Route path="/api/auth/activate/:activation_token" element={<ActivateLayout />} />
+        <Route path="/Affiliate" element={<AffiliatePage />} />
         <Route path="/thankyou" element={<ThankYou />} />
       </Routes>
     </Router>

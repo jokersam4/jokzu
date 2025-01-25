@@ -11,7 +11,8 @@ import "./Login.css";
 import { AuthContext } from "../../context/AuthContext";
 import { jwtDecode } from "jwt-decode"; // Changed to named import
 import { GoogleLogin } from '@react-oauth/google';
-
+import Cookies from "js-cookie";
+import { useLocation } from "react-router-dom";
 const initialState = {
   name: "",
   password: "",
@@ -23,7 +24,25 @@ const Login2 = () => {
   const [data, setData] = useState(initialState);
   const { email, password } = data;
   const { dispatch } = useContext(AuthContext);
-  const { user, token, isLoggedIn } = useContext(AuthContext);
+  const { user, token, isLoggedIn , language} = useContext(AuthContext);
+  const location = useLocation();
+    const [userParam, setUserParam] = useState('');
+    useEffect(() => {
+      const queryParams = new URLSearchParams(location.search);
+      const user = queryParams.get('user'); // Get the 'user' parameter from the URL
+      console.log("sssssssssssss" +userParam)
+      if (user) {
+        setUserParam(user); 
+         // Set affiliate to user if it's not null
+      } else {
+        setUserParam('');  // Return an empty string if user is null
+      }
+    }, [location.search]);
+    useEffect(() => {
+        if (userParam) {
+          console.log("Uszszszsz:", userParam);
+        }
+      }, [userParam]);
   const handleChange = (e) => {
     setData({ ...data, [e.target.name]: e.target.value });
   };
@@ -55,21 +74,7 @@ const Login2 = () => {
   
   
   
-  
-  useEffect(() => {
-    const _appToken = localStorage.getItem("_appToken");
-    if (_appToken) {
-      const getToken = async () => {
-        try {
-          const res = await axios.post("/api/auth/access", null);
-          dispatch({ type: "GET_TOKEN", payload: res.data.ac_token });
-        } catch (error) {
-          console.error("Error fetching token:", error);
-        }
-      };
-      getToken();
-    }
-  }, [dispatch]);
+
   
   useEffect(() => {
     if (token) {
@@ -78,7 +83,7 @@ const Login2 = () => {
           dispatch({ type: "SIGNING" });
           const res = await axios.get("/api/auth/user", {
             headers: { Authorization: token },
-          });
+          }, { withCredentials: true });
           dispatch({ type: "GET_USER", payload: res.data });
         } catch (error) {
           console.error("Error fetching user:", error);
@@ -91,53 +96,13 @@ const Login2 = () => {
     setVisible(!visible);
   };
 
-  const login = async (e) => {
-    e.preventDefault();
-    // check fields
-    if (isEmpty(email) || isEmpty(password))
-      return toast("Please fill in all fields.", {
-        className: "toast-failed",
-        bodyClassName: "toast-failed",
-      });
-    // check email
-    if (!isEmail(email))
-      return toast("Please enter a valid email address.", {
-        className: "toast-failed",
-        bodyClassName: "toast-failed",
-      });
-    try {
-      const res = await axios.post("/api/auth/signing", { email, password });
-      const token = res.data.token;
-      localStorage.setItem("_appToken", token);
-      dispatch({ type: "SIGNING" });
-  
-      // Retrieve user information from decoded token or response data
-      const decodedToken = jwtDecode(token);
-      const { email: userEmail, name: userName } = decodedToken; // Assuming your token contains email and name fields
-  
-      // Log user email and name
-  
-      console.log("token Name:", decodedToken);
-  
-      // Optionally, you can dispatch the user data to your context if needed
-      dispatch({ type: "GET_USER", payload: { email: userEmail, name: userName } });
-  
-      // Redirect or perform any additional actions after successful login
-      // Example: redirect to home page
-      window.location.href = '../';
-    } catch (err) {
-      toast(err.response.data.msg, {
-        className: "toast-failed",
-        bodyClassName: "toast-failed",
-      });
-    }
-  };
-  
+ 
   
 
 
   useEffect(() => {
     const token = localStorage.getItem("_appToken");
+    
     if (token) {
       try {
         const decodedToken = jwtDecode(token);
@@ -153,7 +118,55 @@ const Login2 = () => {
       }
     }
   }, [dispatch]);
+ const login = async (e) => {
 
+    e.preventDefault();
+  
+    // Check fields
+    if (isEmpty(email) || isEmpty(password)) {
+      return toast("Please fill in all fields.", {
+        className: "toast-failed",
+        bodyClassName: "toast-failed",
+      });
+    }
+    
+    // Check email
+    if (!isEmail(email)) {
+      return toast("Please enter a valid email address.", {
+        className: "toast-failed",
+        bodyClassName: "toast-failed",
+      });
+    }
+    
+    try {
+      // Send login request
+      const res = await axios.post("/api/auth/signing", { email, password }, { withCredentials: true });
+      const token = res.data.token;
+      console.log("Token:", token);
+      // Save token to localStorage
+      localStorage.setItem("_appToken", token);
+   //   Cookies.set("_appToken", token, { expires: 7, path: "" });
+      // Decode token to retrieve user information
+      const decodedToken = jwtDecode(token);
+      const { email: userEmail, name: userName } = decodedToken; // Assuming token has these fields
+  
+      console.log("Decoded Token:", decodedToken);
+  
+      // Dispatch user information
+      dispatch({ type: "SIGNING" });
+      dispatch({ type: "GET_USER", payload: { email: userEmail, name: userName } });
+      
+      // Redirect after login
+      window.location.href = `../?user=${userParam}`;
+    } catch (err) {
+      // Show error message
+      toast(err.response?.data?.msg || "An error occurred. Please try again.", {
+        className: "toast-failed",
+        bodyClassName: "toast-failed",
+      });
+      console.error("Login Error:", err);
+    }
+  };
   const googleSuccess = async (response) => {
     console.log("Google Response:", response);
   
@@ -161,16 +174,18 @@ const Login2 = () => {
     
     try {
       const decodedToken = jwtDecode(tokenId);
-      const res = await axios.post("/api/auth/google_signing", { tokenId });
+      const res = await axios.post("/api/auth/google_signing", { tokenId }, { withCredentials: true });
       
       localStorage.setItem("_appToken", tokenId);
       dispatch({ type: "SIGNING" });
+    
 
       const { email, name } = decodedToken;
       console.log("User Email:", email);
       console.log("User Name:", name);
       const userData = decodedToken;
       dispatch({ type: "GET_USER", payload: userData });
+      
 
       await fetch("/api/auth/google_signing", {
         method: "POST",
@@ -183,7 +198,7 @@ const Login2 = () => {
       console.log("Token:", tokenId);
       localStorage.setItem("_appToken", tokenId);
       dispatch({ type: "SIGNING" });
-      window.location.href = '../';
+      window.location.href = `../?user=${userParam}`;
       
     } catch (err) {
       toast(err.response.data.msg, {
@@ -204,26 +219,28 @@ const Login2 = () => {
 
   return (
     <>
-      <ToastContainer />
-      <form className="login" onSubmit={login}>
-        <Input
-          type="email"
-          text="Email"
-          name="email"
-          handleChange={handleChange}
-        />
-        <Input
-          name="password"
-          type={visible ? "text" : "password"}
-          icon={visible ? <MdVisibility /> : <MdVisibilityOff />}
-          text="Password"
-          handleClick={handleClick}
-          handleChange={handleChange}
-        />
-        <div className="login_btn">
-          <button type="submit">login</button>
+    <ToastContainer />
+    <form className="login" onSubmit={login}>
+      <Input
+        type="email"
+        text={language === 'en' ? "Email" : language === 'fr' ? "E-mail" : "البريد الإلكتروني"}
+        name="email"
+        handleChange={handleChange}
+      />
+      <Input
+        name="password"
+        type={visible ? "text" : "password"}
+        icon={visible ? <MdVisibility /> : <MdVisibilityOff />}
+        text={language === 'en' ? "Password" : language === 'fr' ? "Mot de passe" : "كلمة المرور"}
+        handleClick={handleClick}
+        handleChange={handleChange}
+      />
+      <div className="login_btn">
+        <button className="login_btn9" type="submit">
+          {language === 'en' ? "Login" : language === 'fr' ? "Connexion" : "تسجيل الدخول"}
+        </button>
+        <div className="googlebtn">
           <GoogleLogin
-          className="googlebtn"
             clientId={process.env.REACT_APP_G_CLIENT_ID}
             render={(renderProps) => (
               <button
@@ -231,7 +248,7 @@ const Login2 = () => {
                 onClick={renderProps.onClick}
                 disabled={renderProps.disabled}
               >
-                sign in <FcGoogle />
+                {language === 'en' ? "Sign in" : language === 'fr' ? "Se connecter" : "تسجيل الدخول"} <FcGoogle />
               </button>
             )}
             cookiePolicy={"single_host_origin"}
@@ -239,8 +256,10 @@ const Login2 = () => {
             onFailure={googleError}
           />
         </div>
-      </form>
-    </>
+      </div>
+    </form>
+  </>
+  
   );
 };
 

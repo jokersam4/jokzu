@@ -1,12 +1,18 @@
-// models/Promo.js
 const mongoose = require('mongoose');
 
 const promoSchema = new mongoose.Schema({
-    code: { type: String, required: true, unique: true },
-    discount: { type: Number, required: true }, // percentage discount
-    expirationDate: { type: Date, required: true },
-    usageCount: { type: Number, default: 0 }, // Track the number of times the promo has been used
-});
+  codepromo2: {
+    type: String,
+    required: true,
+    
+  },
+  codeusage: { type: Number 
+   , default : 0,
+  },
+  earnings: { type: Number 
+    , default : 0,
+   },
+}); // Adds createdAt and updatedAt fields automatically
 
 const Promo = mongoose.model('Promo', promoSchema);
 

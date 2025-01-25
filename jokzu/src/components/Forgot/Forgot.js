@@ -3,11 +3,12 @@ import { isEmpty, isEmail } from "../helper/validate";
 import axios from "axios";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { useState } from "react";
-
+import { useContext, useState } from "react";
+import './F.css' ;
+import { AuthContext } from "../../context/AuthContext";
 const Forgot = () => {
   const [email, setEmail] = useState("");
-
+  const { user , language} = useContext(AuthContext);
   const handleChange = (e) => {
     setEmail(e.target.value);
   };
@@ -58,8 +59,11 @@ const Forgot = () => {
           name="email"
           handleChange={handleChange}
         />
-        <div className="login_btn">
-          <button type="submit">send</button>
+        <div className="login_btn66">
+        <button type="submit">
+  {language === 'en' ? "Send" : language === 'fr' ? "Envoyer" : "إرسال"}
+</button>
+
         </div>
       </form>
     </>

@@ -11,12 +11,12 @@
  .S9gUrf-YoZ4jf{
   align-self: center;
  }
-.login_btn button {
+.login_btn9 {
 margin: auto;
   padding: 1.2em;
   border-radius: 5px;
   border: none;
-  width: 200px;
+  width: 100%;
   margin-bottom: 30px;
   text-transform: uppercase;
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.35);
@@ -28,45 +28,82 @@ margin: auto;
   justify-content: center;
   align-items: center;
 }
-.login_btn button svg {
+.login_btn9 svg {
   font-size: 1.1rem;
   margin-left: 10px;
 }
 .login_btn {
   font-size: 1.1rem;
-  margin-left: 10px;
+ 
 }
-.login_btn button:hover {
+.login_btn9:hover {
   transition: all 0.3s ease;
+  color: white;
   box-shadow: none;
   background: linear-gradient(to left, #901f00, #ff6600);
 }
-.login_btn .btn-alt {
+.login_btn9-alt {
   background: linear-gradient(to left, #000000, #02897A);
 }
-.login_btn .btn-alt:hover {
+.login_btn9-alt:hover {
   transition: all 0.3s ease;
   box-shadow: none;
   background: linear-gradient(to right, #000000, #02897A);
 }
 
 @media (min-width: 1200px) {
-  .login_btn button {
-    width: 370px;
+  .login_btn9 {
+ 
   }
 }
 @media (max-width: 400px) {
-  .login_btn button {
+  .login_btn9 {
     width: 250px;
   }
-  .login{
-   
-  }
+
 }
 
-
-
-
-
-
 /*# sourceMappingURL=Login.css.map */
+.googlebtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  color: #444;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: 500;
+width: 100%;
+padding-top: 1%;
+padding-bottom: 1%;
+  margin: auto;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.googlebtn:hover {
+  background-color: #f1f1f1;
+  box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+}
+
+.googlebtn:disabled {
+  background-color: #e0e0e0;
+  cursor: not-allowed;
+}
+
+.btn-alt {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: none;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  color: inherit;
+}
+
+.btn-alt svg {
+  font-size: 20px;
+}

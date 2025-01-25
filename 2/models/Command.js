@@ -5,6 +5,7 @@ const commandSchema = new mongoose.Schema({
   quantity: { type: Number, required: true },
   name: { type: String, required: true },
   phoneNumber: { type: String, required: true },
+  codepromo: { type: String},
 }, { timestamps: true });
 
 module.exports = mongoose.model('Command', commandSchema);

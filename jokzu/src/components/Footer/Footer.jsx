@@ -1,9 +1,11 @@
 // src/components/Footer/Footer.js
-import React from 'react';
+import React, { useContext } from 'react';
 import './Footer.css';
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin } from 'react-icons/fa';
+import { AuthContext } from '../../context/AuthContext';
 
 const Footer = () => {
+   const { user , language} = useContext(AuthContext);
   return (
     <footer className="footer">
       <div className="social-media">
@@ -20,7 +22,15 @@ const Footer = () => {
           <FaLinkedin />
         </a>
       </div>
-      <p className="footer-text">&copy; 2024 Pluton. All rights reserved.</p>
+      <p className="footer-text">
+  &copy; 2024 Pluton. 
+  {language === 'en' 
+    ? "All rights reserved." 
+    : language === 'fr' 
+    ? "Tous droits réservés." 
+    : "جميع الحقوق محفوظة."}
+</p>
+
     </footer>
   );
 };

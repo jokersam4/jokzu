@@ -22,9 +22,9 @@ const userSchema = new Schema(
       type: String,
       default: "https://asset.cloudinary.com/dxw3ie0en/b9fc668dc442d50cace046943244b4c3",
     },
-    credit: {
-      type: Number,
-      default: 0 // Initial credit value
+    codepromo: {
+      type: String,
+      default: "empty" // Initial credit value
     }
   },
   { timestamp: true }

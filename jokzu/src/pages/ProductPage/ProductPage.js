@@ -1,10 +1,10 @@
-import React, { useContext, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import React, { useContext, useEffect, useState } from 'react';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { Carousel } from 'react-responsive-carousel';
 import 'react-responsive-carousel/lib/styles/carousel.min.css';
 import './ProductPage.css';
 import Comments from '../../components/ReviewForm/ReviewForm';
-import '../../components/PaymentForm/PaymentForm.css';
+
 import axios from 'axios';
 import Footer from '../../components/Footer/Footer';
 import { AuthContext } from '../../context/AuthContext';
@@ -20,47 +20,102 @@ const ProductPage = ({ products }) => {
   const [showForm, setShowForm] = useState(false);
   const [reviews, setReviews] = useState(product ? product.reviews : []);
   const [discount, setDiscount] = useState(0);
-  const { language } = useContext(AuthContext); 
+  const { language } = useContext(AuthContext);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
     phoneNumber: '',
   });
-
+ const location = useLocation();
+    const [userParam, setUserParam] = useState('');
+    useEffect(() => {
+      const queryParams = new URLSearchParams(location.search);
+      const user = queryParams.get('user'); // Get the 'user' parameter from the URL
+      console.log("sssssssssssss" +userParam)
+      if (user) {
+        setUserParam(user); 
+         // Set affiliate to user if it's not null
+      } else {
+        setUserParam('');  // Return an empty string if user is null
+      }
+    }, [location.search]);
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const applyPromo = async () => {
+  // const handlePromoCodeValidation = async () => {
+  //   try {
+  //     const response = await axios.post('http://localhost:5000/api/validate-promo', { promoCode });
+  //     if (response.data.valid) {
+  //       setDiscount(response.data.discount);
+  //       setMessage(language === 'en' ? 'Promo code applied!' : language === 'fr' ? 'Code promo appliqué!' : 'تم تطبيق الرمز الترويجي!');
+  //     } else {
+  //       setMessage(language === 'en' ? 'Invalid promo code.' : language === 'fr' ? 'Code promo invalide.' : 'رمز ترويجي غير صالح.');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error validating promo code:', error);
+  //     setMessage(language === 'en' ? 'Error validating promo code.' : language === 'fr' ? 'Erreur lors de la validation du code promo.' : 'خطأ في التحقق من الرمز الترويجي.');
+  //   }
+  // };
+  const checkPromoCode = async () => {
     try {
-      const response = await axios.get(`http://localhost:5000/api/coupon`);
-      if (response.data.exists) {
-        setMessage('Promo code applied successfully!');
-      } else {
-        setMessage('Invalid promo code. Please try again.');
-      }
+      const response = await axios.post('/api/codepromo2', { code: promoCode });
+      setMessage(response.data.message);
     } catch (error) {
-      console.error('Error:', error);
-      setMessage('Error applying promo code. Please try again later.');
+      if (error.response) {
+        setMessage(error.response.data.message);
+      } else {
+        setMessage("An error occurred. Please try again.");
+      }
     }
   };
-
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let promoToSend = ''; // Default promo code value is an empty string
+
     try {
-      const response = await axios.post('http://localhost:5000/api/commands', {
+      // Check if the promo code is provided
+      if (promoCode.trim() !== '') {
+        try {
+          const promoResponse = await axios.post('/api/codepromo2', { code: promoCode });
+          if (promoResponse.data.valid) {
+            promoToSend = promoCode; // Update promoToSend if the promo code is valid
+
+            // Increment the usage count for the promo code
+            await axios.patch('/api/codepromo2', { code: promoCode });
+          }
+        } catch (promoError) {
+          if (promoError.response && promoError.response.status === 404) {
+            setMessage(
+              language === 'en'
+                ? 'Invalid promo code.'
+                : language === 'fr'
+                  ? 'Code promo invalide.'
+                  : 'رمز ترويجي غير صالح.'
+            );
+          } else {
+            console.error('Error validating promo code:', promoError);
+          }
+        }
+      }
+
+      // Proceed with form submission
+      const response = await axios.post('/api/commands', {
         size: selectedSize,
         quantity,
         name: `${formData.firstName} ${formData.lastName}`,
         phoneNumber: formData.phoneNumber,
-        promoCode
+        codepromo: userParam, // Send the valid promo code or an empty string
       });
+
       console.log(response.data);
-      navigate('/thankyou'); // Navigate to the /thankyou route
+      navigate('/thankyou'); // Navigate to the thank you page
     } catch (error) {
-      console.error('Error:', error);
+      console.error('Error submitting form:', error);
     }
   };
+
+
 
   const handleSizeChange = (e) => {
     setSelectedSize(e.target.value);
@@ -139,7 +194,22 @@ const ProductPage = ({ products }) => {
                   required
                 />
               </label>
-              <button type="submit">Submit</button>
+              {/* <div className='zzz'>
+                <h2>add code promo to get 10% discount</h2>
+                <div>
+            
+                  type="text"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value)}
+                  placeholder="Enter promo code"
+             
+                <button type="button" onClick=>Check</button> /* Add type="button" */
+         
+              }
+
+          
+
+              <button className='eee' type="submit">Submit</button>
             </form>
           ) : (
             <div className="product-details">
@@ -162,13 +232,10 @@ const ProductPage = ({ products }) => {
                 <label htmlFor="quantity">{language === 'en' ? "Quantity:" : language === 'fr' ? "Quantité:" : "الكمية:"}</label>
                 <input type="number" id="quantity" value={quantity} onChange={handleQuantityChange} min={1} required />
               </div>
-              <button className="buy-now-button" onClick={handleBuyNow}>
-                {language === 'en' ? "Order Now" : language === 'fr' ? "Commandez maintenant" : "اطلب الآن"}
-              </button>
+              <button className="buy-now-button" onClick={handleBuyNow}>{language === 'en' ? "Order Now" : language === 'fr' ? "Commandez maintenant" : "اطلب الآن"}</button>
             </div>
           )}
         </div>
-
         <Comments reviews={reviews} addReview={addReview} />
       </div>
       <Footer />
